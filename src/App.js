@@ -9,6 +9,7 @@ import config from './config/configKey'
 import Login from './components/Login'
 import SignUp from './components/SignUp'
 import MainDashBoard from './components/MainDashBoard'
+import TabContainer from './components/materialUi'
 
 firebase.initializeApp(config);
 
@@ -46,18 +47,21 @@ class App extends Component {
             exact path="/"
             render={() => <Login
               state={this.state}
+              gettingWholeData={this.gettingWholeData}
             />} />
 
           <Route
-            exact path="/SignUp"
-            render={() => <SignUp
+            exact path="/TabContainer"
+            render={() => <TabContainer
               state={this.state}
+              gettingWholeData={this.gettingWholeData}
             />} />
 
           <Route
             exact path="/MainDashBoard"
             render={() => <MainDashBoard
               state={this.state}
+              gettingWholeData={this.gettingWholeData}
             />} />
 
         </Router>

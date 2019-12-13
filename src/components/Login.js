@@ -4,7 +4,6 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 
-
 class Login extends Component {
     constructor(props) {
         super(props)
@@ -46,38 +45,45 @@ class Login extends Component {
             });
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.onAuthStateChanged()
     }
 
+
     render() {
+        // const labelRef = React.useRef(null);
+        // const classes = useStyles();
+
         return (
             <div className='mainContainer'>
-                <div className="header">
-                    Login To Chat...
+                <div className="topButton">
+
+                    <div className="header">
+                        Login To Chat...
                 </div>
-                <div className='inputDiv'>
-                    <form onSubmit={(ev) => this.login(ev)}>
-                        <input
-                            type='text'
-                            name='email'
-                            placeholder='Email'
-                            onChange={(ev) => this.gettingValues(ev)}
-                            required
-                            autoFocus
-                        />
-                        <input
-                            type='password'
-                            name='password'
-                            placeholder='Password'
-                            onChange={(ev) => this.gettingValues(ev)}
-                            required
-                        />
-                        <button>Login</button>
-                    </form>
-                    <div className="signUp">
-                        Wants to Chat with Friends ? Don't have an ACCOUNT <br />
-                        <button onClick={this.changePath}>Sign Up Now</button>
+                    <div className='inputDiv'>
+                        <form onSubmit={(ev) => this.login(ev)}>
+                            <input
+                                type='text'
+                                name='email'
+                                placeholder='Email'
+                                onChange={(ev) => this.gettingValues(ev)}
+                                required
+                                autoFocus
+                            />
+                            <input
+                                type='password'
+                                name='password'
+                                placeholder='Password'
+                                onChange={(ev) => this.gettingValues(ev)}
+                                required
+                            />
+                            <button>Login</button>
+                        </form>
+                        <div className="signUp">
+                            Wants to Chat with Friends ? Don't have an ACCOUNT <br />
+                            <button onClick={this.changePath}>Sign Up Now</button>
+                        </div>
                     </div>
                 </div>
             </div>

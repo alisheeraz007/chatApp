@@ -2,6 +2,13 @@
     margin: 0;
     padding: 0;
 }
+body{
+    height: 100vh;
+    background: #acd8fd; 
+    background: -moz-linear-gradient(-121deg,  #acd8fd 0%,#fbfcfe 100%); 
+    background: -webkit-linear-gradient(-121deg,  #acd8fd 0%,#fbfcfe 100%); 
+    background: linear-gradient(-121deg,  #acd8fd 0%,#fbfcfe 100%);
+}
 .header{
     position: absolute;
     top: 20%;
@@ -73,16 +80,19 @@
 .dashBoard .header{
     top: 10% !important;
 }
+.topButton{
+    width: 100%;
+}
 .topButton button{
     background-color: transparent;
     border: 1px solid black;
     padding: 5px;
     font-weight: bold;
     border-radius: 5px;
-    position: absolute;
-    top: 1%;
-    left: 1%;
-    transform: translate(-1%,-1%);
+    float: left;
+    margin-top: 3px;
+    width: 25%;
+    height: 45px;
 }
 .abc{
     top: 10% !important;
@@ -98,25 +108,26 @@
     border-radius: 5px
 }
 .sendMesseges{
-    width: 95%;
-    height: 30px;
-    margin: 5%;
+    width: 99%;
+    min-height: 65px;
+    max-height: 10000px;
 }
-.sendMesseges span{
+.sendMesseges .chat{
     padding: 10px;
     border: 1px solid black;
     border-radius: 5px;
     float: right;
 }
 .recieved{
-    width: 95%;
-    height: 30px;
-    margin: 5%;
+    width: 99%;
+    min-height: 65px;
+    max-height: 10000px;
 }
-.recieved span{
+.recieved .chat{
     padding: 10px;
     border: 1px solid black;
     border-radius: 5px;
+    float: left;
 }
 .messegeInput{
     position: fixed;
@@ -143,4 +154,38 @@
 .mainChat{
     height: 368px;
     overflow-y: scroll;
+}
+.dateandtime{
+    font-size: 10px;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+.createGroup{
+    /* float: right !important; */
+}
+.addMembers{
+    position: relative;
+    top: 0 !important;
+}
+.addMembersHead{
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: cursive;
+}
+.newChat{
+    top: 20% !important;
+}
+.newChat input{
+    margin-bottom: 5px !important;
+}
+.newChat button{
+    width: 60%;
+    font-size: 20px;
+    height: 45px;
+    margin-bottom: 5px;
+}
+.bbb{
+    color: red;
 }

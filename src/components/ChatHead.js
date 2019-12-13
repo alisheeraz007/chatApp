@@ -12,7 +12,8 @@ class ChatHead extends Component {
             lastName: null,
             messege: null,
             myUserName: null,
-            recieved: null
+            recieved: null,
+            messege: ""
         }
     }
 
@@ -41,23 +42,57 @@ class ChatHead extends Component {
 
     send = (ev) => {
         ev.preventDefault();
-        let date = new Date;
-        let year = date.getFullYear()
-        let time = date.getMinutes()
-        let seconds = date.getMilliseconds()
-        let code = `${year}${time}${seconds}`
-        // console.log(code)
-        let obj = {
-            [this.state.recievedMessege]: this.state.messege,
-            recievedMessege: this.state.recievedMessege,
-            
+        let getData = false;
+        if (!getData) {
+            this.props.gettingWholeData()
+            getData = true
         }
-        firebase.database().ref('wholeData').child(this.props.userName).child('messeges').child(code).set(obj)
-        let obj2 = {
-            [this.state.myMessege]: this.state.messege,
-            myMessege: this.state.myMessege,
+        if (getData) {
+
+            let date = new Date;
+            let year = date.getFullYear()
+            let month = date.getMonth()
+            let currenDate = date.getDate()
+            let hour = date.getHours()
+            let minutes = date.getMinutes()
+            let seconds = date.getMilliseconds()
+            let code = `${year}${month}${currenDate}${hour}${minutes}`
+            let obj = {
+                [this.state.recievedMessege]: this.state.messege,
+                recievedMessege: this.state.recievedMessege,
+                time: hour + ":" + minutes,
+                date: currenDate + "/" + month + "/" + year
+            }
+            let obj2 = {
+                [this.state.myMessege]: this.state.messege,
+                myMessege: this.state.myMessege,
+                time: hour + ":" + minutes,
+                date: currenDate + "/" + month + "/" + year
+            }
+            if (this.props.state.wholeData[this.props.userName].messeges) {
+                let lastCode = Object.keys(this.props.state.wholeData[this.props.userName].messeges)
+                let index = lastCode.length - 1
+                if (lastCode[index]) {
+                    // console.log(lastCode[index])
+                    let currentCode = Number(lastCode[index]) + 1
+                    firebase.database().ref('wholeData').child(this.props.userName).child('messeges').child(currentCode).set(obj)
+                    firebase.database().ref('wholeData').child(this.state.myUserName).child('messeges').child(currentCode).set(obj2)
+                }
+            } else {
+                firebase.database().ref('wholeData').child(this.props.userName).child('messeges').child(code).set(obj)
+                firebase.database().ref('wholeData').child(this.state.myUserName).child('messeges').child(code).set(obj2)
+            }
         }
-        firebase.database().ref('wholeData').child(this.state.myUserName).child('messeges').child(code).set(obj2)
+        setTimeout(() => {
+            this.scroll()
+            this.setState({
+                messege: ""
+            })
+        }, 100)
+    }
+
+    dashBoard = () => {
+        this.props.dashBoard()
     }
 
     componentWillMount() {
@@ -66,10 +101,21 @@ class ChatHead extends Component {
             firstName: this.props.state.wholeData[this.props.userName].firstName,
             lastName: this.props.state.wholeData[this.props.userName].lastName,
         })
+        setTimeout(() => {
+            this.scroll()
+        }, 100)
+    }
+
+    scroll = () => {
+        const element = document.getElementById("mainChat");
+        // console.log(element)
+        if(element){
+            element.scrollTop = element.scrollHeight;
+        }
     }
 
     render() {
-        // console.log(this.state.recieved)
+        // console.log(this.props.state.wholeData[this.props.userName].messeges)
         return (
             this.state.recieved ?
                 <div className="chatHead">
@@ -79,7 +125,7 @@ class ChatHead extends Component {
                             return (
                                 user.userName === this.state.myUserName &&
                                     user.messeges ?
-                                    <div className='mainChat' key={index}>
+                                    <div id="mainChat" className='mainChat' key={index}>
                                         {Object.values(user.messeges).map((messege, index) => {
                                             return (
                                                 <div key={index}>
@@ -88,7 +134,9 @@ class ChatHead extends Component {
                                                             key={index}
                                                             className='sendMesseges'
                                                         >
-                                                            <span>{messege[this.state.myMessege]}</span>
+                                                            <span className="chat">{messege[this.state.myMessege]}<br />
+                                                                <span className="dateandtime">{messege.date} {messege.time}</span>
+                                                            </span>
                                                         </div>
                                                         : null}
                                                     {this.state.recieved === messege.recievedMessege ?
@@ -96,10 +144,13 @@ class ChatHead extends Component {
                                                             key={index}
                                                             className='recieved'
                                                         >
-                                                        {/* {console.log(messege.recievedMessege)} */}
-                                                            <span>{messege[this.state.recieved]}</span>
+                                                            {/* {console.log(messege.recievedMessege)} */}
+                                                            <span className="chat">{messege[this.state.recieved]}<br />
+                                                                <span className="dateandtime">{messege.date}{messege.time}</span>
+                                                            </span>
+
                                                         </div>
-                                                        : console.log(this.state.recieved, messege.recievedMessege)}
+                                                        : null}
                                                 </div>
                                             )
                                         })}
@@ -107,19 +158,23 @@ class ChatHead extends Component {
                                     : null
                             )
                         })}
-                    <div className='messegeInput'>
-                        <form onSubmit={(ev) => this.send(ev)}>
-                            <input
-                                type="text"
-                                name="messege"
-                                placeholder="Type Your Messege"
-                                onChange={(ev) => this.gettingValues(ev)}
-                                required
-                                autoFocus
-                            />
-                            <button>Send</button>
-                        </form>
+                        <div className='messegeInput'>
+                            <form onSubmit={(ev) => this.send(ev)}>
+                                <input
+                                    type="text"
+                                    name="messege"
+                                    placeholder="Type Your Messege"
+                                    onChange={(ev) => this.gettingValues(ev)}
+                                    value={this.state.messege}
+                                    required
+                                    autoFocus
+                                />
+                                <button>Send</button>
+                            </form>
+                        </div>
                     </div>
+                    <div className="topButton">
+                        <button onClick={(ev) => this.dashBoard(ev)}>Back</button>
                     </div>
                 </div>
                 : "loading"
